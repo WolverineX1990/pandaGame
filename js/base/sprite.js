@@ -16,6 +16,12 @@ export default class Sprite {
     this.visible = true;
   }
 
+  update(imgSrc, width, height, x, y) {
+    if(imgSrc) {
+      this.img.src = imgSrc;
+    }
+  }
+
   /**
    * 将精灵图绘制在canvas上
    */

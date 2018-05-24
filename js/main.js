@@ -38,10 +38,34 @@ export default class Main {
       console.log('start');
     });
     this.startLayer.addChild(startBtn);
+
+    //背景音乐
     let bgBtn = new Sprite('images/btnmelody-sheet0.png', 50, 50, 30, screenHeight - 80);
+    let bgMusicPlay = true;
+    bgBtn.addeventListener('touchstart', () => {
+      if(bgMusicPlay) {
+        bgBtn.update('images/btnmelody-sheet1.png');
+      } else {
+        bgBtn.update('images/btnmelody-sheet0.png');
+      }
+      bgMusicPlay = !bgMusicPlay;
+    });
     this.startLayer.addChild(bgBtn);
+
+    //音乐
     let musicBtn = new Sprite('images/btnsound-sheet0.png', 50, 50, screenWidth - 80, screenHeight - 80);
+    let musicPlay = true;
+    musicBtn.addeventListener('touchstart', () => {
+      if(musicPlay) {
+        musicBtn.update('images/btnsound-sheet1.png');
+      } else {
+        musicBtn.update('images/btnsound-sheet0.png');
+      }
+      musicPlay = !musicPlay;
+    });
     this.startLayer.addChild(musicBtn);
+
+
     // this.music = new Music();
     this.bindLoop = this.loop.bind(this);
   }
