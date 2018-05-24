@@ -33,6 +33,15 @@ export default class Main {
     this.startLayer.addChild(sun);
     let logo = new Sprite('images/gamelogo.png', 256, 192, screenWidth/2 - 128 , 90);
     this.startLayer.addChild(logo);
+    let startBtn = new Sprite('images/btnplay-sheet0.png', 60, 60, screenWidth/2 - 30, screenHeight - 120);
+    startBtn.addeventListener('touchstart', () => {
+      console.log('start');
+    });
+    this.startLayer.addChild(startBtn);
+    let bgBtn = new Sprite('images/btnmelody-sheet0.png', 50, 50, 30, screenHeight - 80);
+    this.startLayer.addChild(bgBtn);
+    let musicBtn = new Sprite('images/btnsound-sheet0.png', 50, 50, screenWidth - 80, screenHeight - 80);
+    this.startLayer.addChild(musicBtn);
     // this.music = new Music();
     this.bindLoop = this.loop.bind(this);
   }

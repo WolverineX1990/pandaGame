@@ -3,16 +3,17 @@
  */
 export default class Sprite {
   constructor(imgSrc = '', width=  0, height = 0, x = 0, y = 0) {
-    this.img     = new Image()
-    this.img.src = imgSrc
+    this.img     = new Image();
+    this.img.src = imgSrc;
 
-    this.width  = width
-    this.height = height
+    this.width  = width;
+    this.height = height;
 
-    this.x = x
-    this.y = y
+    this.x = x;
+    this.y = y;
+    this.funcs = [];
 
-    this.visible = true
+    this.visible = true;
   }
 
   /**
@@ -32,6 +33,22 @@ export default class Sprite {
   }
 
   /**
+   * 当手指触摸屏幕的时候
+   * 判断手指是否在飞机上
+   * @param {Number} x: 手指的X轴坐标
+   * @param {Number} y: 手指的Y轴坐标
+   * @return {Boolean}: 用于标识手指是否内部
+   */
+  checkIsInSide(x, y) {
+    const deviation = 30
+
+    return !!(   x >= this.x
+              && y >= this.y
+              && x <= this.x + this.width
+              && y <= this.y + this.height);
+  }
+
+  /**
    * 简单的碰撞检测定义：
    * 另一个精灵的中心点处于本精灵所在的矩形内即可
    * @param{Sprite} sp: Sptite的实例
@@ -47,5 +64,14 @@ export default class Sprite {
               && spX <= this.x + this.width
               && spY >= this.y
               && spY <= this.y + this.height  )
+  }
+
+  addeventListener(type, func) {
+    document.addEventListener(type, (e)=>{
+      let point = e.touches[0];
+      if(this.checkIsInSide(point.clientX, point.clientY)) {
+        func();
+      }
+    });
   }
 }
