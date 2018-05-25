@@ -1,6 +1,7 @@
 export default class Layer {
   constructor() {
     this.childrens = [];
+    this.visible = true;
   }
 
   addChild(sprite) {
@@ -12,6 +13,9 @@ export default class Layer {
   }
 
   render(ctx) {
+    if ( !this.visible ) {
+      return;
+    }
     if(!ctx) {
       throw new Error('没有绘制ctx对象');
     }

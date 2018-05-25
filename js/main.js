@@ -1,8 +1,8 @@
-import Player from './player/index'
-import Enemy from './npc/enemy'
-import BackGround from './runtime/background'
-import GameInfo from './runtime/gameinfo'
-import Music from './runtime/music'
+import Player from './player/index';
+import Enemy from './npc/enemy';
+import BackGround from './runtime/background';
+import GameInfo from './runtime/gameinfo';
+import Music from './runtime/music';
 import DataBus from './databus';
 import Sprite from './base/sprite';
 import RotateAni from './base/rotateAni';
@@ -18,7 +18,6 @@ const screenHeight   = window.innerHeight;
  */
 export default class Main {
   constructor() {
-    this.bg = new BackGround(ctx);
     this.initGameUI();
     this.aniId = window.requestAnimationFrame(
       this.bindLoop,
@@ -27,18 +26,10 @@ export default class Main {
   }
 
   initGameUI() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    this.startLayer = new Layer();
-    let sun = new RotateAni('images/sunlogo.png', 300, 300, screenWidth/2 - 150 , 40, 1.5);
-    this.startLayer.addChild(sun);
-    let logo = new Sprite('images/gamelogo.png', 256, 192, screenWidth/2 - 128 , 90);
-    this.startLayer.addChild(logo);
-    let startBtn = new Sprite('images/btnplay-sheet0.png', 60, 60, screenWidth/2 - 30, screenHeight - 120);
-    startBtn.addeventListener('touchstart', () => {
-      console.log('start');
-    });
-    this.startLayer.addChild(startBtn);
-
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+    this.bgLayer = new Layer();
+    var bg = new BackGround(ctx);
+    this.bgLayer.addChild(bg);
     //背景音乐
     let bgBtn = new Sprite('images/btnmelody-sheet0.png', 50, 50, 30, screenHeight - 80);
     let bgMusicPlay = true;
@@ -50,7 +41,7 @@ export default class Main {
       }
       bgMusicPlay = !bgMusicPlay;
     });
-    this.startLayer.addChild(bgBtn);
+    this.bgLayer.addChild(bgBtn);
 
     //音乐
     let musicBtn = new Sprite('images/btnsound-sheet0.png', 50, 50, screenWidth - 80, screenHeight - 80);
@@ -63,8 +54,24 @@ export default class Main {
       }
       musicPlay = !musicPlay;
     });
-    this.startLayer.addChild(musicBtn);
+    this.bgLayer.addChild(musicBtn);
 
+    this.startLayer = new Layer();
+    let sun = new RotateAni('images/sunlogo.png', 300, 300, screenWidth/2 - 150 , 40, 1.5);
+    this.startLayer.addChild(sun);
+    let logo = new Sprite('images/gamelogo.png', 256, 192, screenWidth/2 - 128 , 90);
+    this.startLayer.addChild(logo);
+    let startBtn = new Sprite('images/btnplay-sheet0.png', 60, 60, screenWidth/2 - 30, screenHeight - 120);
+    startBtn.addeventListener('touchstart', () => {
+      this.startLayer.visible = false;
+      this.scoreLayer.visible = true;
+    });
+    this.startLayer.addChild(startBtn);
+
+    this.scoreLayer = new Layer();
+    this.scoreLayer.visible = false;
+    let sun1 = new RotateAni('images/sunscore-sheet0.png', 150, 150, screenWidth/2 - 75 , 40, 1);
+    this.scoreLayer.addChild(sun1);
 
     // this.music = new Music();
     this.bindLoop = this.loop.bind(this);
@@ -161,7 +168,7 @@ export default class Main {
   render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    this.bg.render(ctx);
+    // this.bg.render(ctx);
 
     databus.bullets
       .concat(databus.enemys)
@@ -173,7 +180,9 @@ export default class Main {
       this.player.drawToCanvas(ctx); 
     }
 
+    this.bgLayer.render(ctx);
     this.startLayer.render(ctx);
+    this.scoreLayer.render(ctx);
 
     databus.animations.forEach((ani) => {
       if (ani.isPlaying) {
@@ -202,7 +211,7 @@ export default class Main {
     if (databus.gameOver)
       return;
 
-    this.bg.update();
+    // this.bg.update();
 
     databus.bullets
       .concat(databus.enemys)
@@ -223,6 +232,7 @@ export default class Main {
   updateStage() {
     // this.bg.update();
     this.startLayer.update();
+    this.bgLayer.update();
   }
 
   // 实现游戏帧循环

@@ -35,7 +35,7 @@ export default class Sprite {
       this.y,
       this.width,
       this.height
-    )
+    );
   }
 
   /**
